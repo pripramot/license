@@ -1,5 +1,5 @@
 ---
-title: "Using Virtual Environments with pip on Windows 10 and VS Code(English)"
+title: "Example of writing  wiki: Using Virtual Environments with pip on Windows 10 and VS Code(English)"
 seoTitle: "Python & VS Code Virtual Environments Windows 10"
 seoDescription: "Python & VS Code Virtual Environments Windows 10"
 datePublished: Sun Mar 10 2024 19:47:04 GMT+0000 (Coordinated Universal Time)
