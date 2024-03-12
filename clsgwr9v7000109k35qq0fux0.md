@@ -17,6 +17,10 @@ tags: encouragement-thailand
 
 <iframe src="https://archive.org/details/15_20211116_20211116/01+%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B1%E0%B8%95%E0%B8%B4%E0%B8%AB%E0%B8%A5%E0%B8%A7%E0%B8%87%E0%B8%9B%E0%B8%B9%E0%B9%88%E0%B8%A1%E0%B8%B1%E0%B9%88%E0%B8%99+%E0%B8%A0%E0%B8%B9%E0%B8%A3%E0%B8%B4%E0%B8%97%E0%B8%B1%E0%B8%95%E0%B9%82%E0%B8%95.mp3" width="480" height="540" class="mx-auto"></iframe>
 
+ประวัติหลวงปู่มั่น ภูริทัตโต โดย หลวงตามหาบัว ญาณสัมปันโน 20 ตอน ต่อเนื่อง ไม่มีโฆษณาเเฝง
+
+ตัวอย่าง: การเเสดงผล ของ HTML CODE ที่วางคำสั่ง iframe บน hashnode ลดการเขียน css,javascript ใช้ Advanced Search Archive( \*Archive หมายถึงห้องสมุด ห้องสมุดดิจิทัล สหรัฐอเมริกา,องค์กรไม่แสวงหากำไร) hashnode จะให้ CDN ที่ฟรี เรายังหมดห่วงเรื่องตัวติดตามหรือโฆษณาแฝงเช่น เวบไชต์ หลอกลวง ให้เราคลิ๊กลิ้ง เวบการพนัน เวบที่ไม่เหมาะสมฯ
+
 ## **Luang Pu Mun Bhuridatta (1870-1949)**
 
 Luang Pu Man Phurithatto\[1\]\[2\] (20 January 1870 - 11 November 1949) was a senior monk of the Dhammayutta sect. People from Ubon Ratchathani Province
