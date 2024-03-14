@@ -214,7 +214,7 @@ https://play.kakjeawplay.xyz/embed/ugut2bi8xp
 
 # Example 4: Embedded CDN
 
-## **img** cdn hashnode**.**
+## **img** cdn hashnode\*\*.\*\*
 
 ### Reduce the load on the server side.
 
@@ -237,3 +237,7 @@ https://play.kakjeawplay.xyz/embed/ugut2bi8xp
 ## **Just a moment please.**
 
 ### Just a moment please.
+
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1710424503672/74c12e37-68c0-4ccf-923a-be8ad97a81f6.png align="center")
+
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1710424431410/5a9e6a0a-ac83-43c6-b991-9cc79e8c60c9.png align="center")
