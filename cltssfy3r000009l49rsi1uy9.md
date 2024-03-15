@@ -35,7 +35,7 @@ https://&lt;ชื่อที่คุณต้องการ&gt;.[hashnode.de
 
 ### 4.เชื่อมต่อ github เพื่อเก็บข้อมูล word excel pdf ไฟล์เอกสารทั่วไป เเบบไม่จำกัดเเละไม่มีหมดอายุ เช่น
 
-%[https://gist.github.com/ai-jiraphinya/bafdc5ad693d17bfbec8b1f66637e54e?permalink_comment_id=4989484#gistcomment-4989484] 
+%[https://gist.github.com/ai-jiraphinya/bafdc5ad693d17bfbec8b1f66637e54e] 
 
 ### 5.กรณีลูกค้าไม่มีบัญชี github เราเเนะนำการสมัครให้ฟรี เเบบไม่ต้องยืนยันบัตรเครดิต
 
