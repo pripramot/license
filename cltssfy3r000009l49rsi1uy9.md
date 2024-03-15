@@ -31,7 +31,7 @@ https://&lt;ชื่อที่คุณต้องการ&gt;.[hashnode.de
 
 **เช่น**[**mtify.hashnode.dev**](http://mtify.hashnode.dev)
 
-### 3.Hashnode เป็น CMS โดยใช้ Blog Starter และ API สาธารณะโฮสต์ส่วนหน้า ฟรี
+### 3.Hashnode เป็น CMS โดยใช้ Blog Starter และ API สาธารณะโฮสต์ส่วนหน้า ฟรี ได้โหมดมืด-โหมดสว่าง
 
 ### 4.เชื่อมต่อ github เพื่อเก็บข้อมูล word excel pdf ไฟล์เอกสารทั่วไป เเบบไม่จำกัดเเละไม่มีหมดอายุ เช่น
 
