@@ -3,7 +3,7 @@ title: "รับเขียนโปรแกรม ✍ที่เรีย�
 datePublished: Fri Mar 15 2024 15:02:39 GMT+0000 (Coordinated Universal Time)
 cuid: cltssfy3r000009l49rsi1uy9
 slug: 4lij4lix4lia4lma4lic4li14lii4liz4lmc4lib4lij4lmb4lib4lij4lihiokcjec4lc4tec5ioc5goc4oc4tec4ouc4muc4hc5ioc4suc4ouc5goc5goc4pec4soc5hoc4oec5ioc4ic4sec4muc4ic5iec4rec4msdguydguirguyjgujkg4lmc4lib4lij4lma4lii4lieoia
-cover: https://cdn.hashnode.com/res/hashnode/image/stock/unsplash/0Z0EofYqMMg/upload/3ef30061d277e7ac5142aee793db1cb0.jpeg
+cover: https://cdn.hashnode.com/res/hashnode/image/stock/unsplash/O2u6gA2esAI/upload/4105c5dfbda3b252f38b9ae9f9c430ad.jpeg
 
 ---
 
