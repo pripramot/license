@@ -3,6 +3,7 @@ title: "Spotify with Python"
 datePublished: Sun Mar 17 2024 07:27:28 GMT+0000 (Coordinated Universal Time)
 cuid: cltv729nw000108id8afhd2n2
 slug: spotify-with-python
+cover: https://cdn.hashnode.com/res/hashnode/image/stock/unsplash/I3ZzOkiAbTI/upload/aa7431b42e500e17ba90a5dbccd11191.jpeg
 
 ---
 
