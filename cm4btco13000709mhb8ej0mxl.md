@@ -22,7 +22,7 @@ slug: sparesos
 
 > ---
 
-## เปิดจักวาลลองของ
+### เปิดจักวาล ลองของ
 
 %[https://www.youtube.com/watch?v=sUQ3SknEWsE] 
 
