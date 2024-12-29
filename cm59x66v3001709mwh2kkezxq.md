@@ -4,7 +4,7 @@ seoTitle: "Scenic Swiss Train Rides You Must Experience"
 seoDescription: "Discover 13 scenic Swiss train rides with breathtaking views and luxurious comfort through the majestic Alps"
 datePublished: Sun Dec 29 2024 18:03:53 GMT+0000 (Coordinated Universal Time)
 cuid: cm59x66v3001709mwh2kkezxq
-slug: 13-unique-scenic-train-rides-in-switzerland-with-epic-views-luxurious-comfort
+slug: 13-unique
 cover: https://cdn.hashnode.com/res/hashnode/image/upload/v1735495291466/9833b706-b8ca-4302-8746-f6c030049583.webp
 tags: sparesos
 
