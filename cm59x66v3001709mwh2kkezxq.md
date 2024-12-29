@@ -1,5 +1,5 @@
 ---
-title: "13 Unique & Scenic Train Rides In Switzerland With Epic Views & Luxurious Comfort"
+title: "Unique & Scenic Train Rides In Switzerland With Epic Views & Luxurious Comfort"
 seoTitle: "Scenic Swiss Train Rides You Must Experience"
 seoDescription: "Discover 13 scenic Swiss train rides with breathtaking views and luxurious comfort through the majestic Alps"
 datePublished: Sun Dec 29 2024 18:03:53 GMT+0000 (Coordinated Universal Time)
@@ -34,18 +34,6 @@ Dreaming of visiting the nation of fondue and majestic snowscape views? There's 
     
 * Complimentary Swiss Family Card and free travel for all children aged 0-16
     
-
-**★ 4.9** (8,660) • 200K+ booked
-
-**From US$ 270.49**
-
-**Book now**
-
-**★ 4.6** (2,413) • 80K+ booked
-
-**From US$ 295.05**
-
-**Book now**
 
 ## **13 best unique & scenic train rides in Switzerland**
 
