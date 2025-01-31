@@ -8,11 +8,9 @@ slug: facebook-2025
 
 ---
 
-### **ขนาดรูป Facebook**
-
-![ขนาดรูปภาพ Facebook](https://talkatalka.com/wp-content/uploads/2023/11/TALKA_202311_Content09-02.jpg align="left")
-
 ### **ขนาดรูปภาพ Facebook**
+
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1738334387290/84a13477-eff6-48ae-aafc-a16f209aa6f8.jpeg align="center")
 
 ขนาดรูปภาพ Facebook
 
