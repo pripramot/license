@@ -4,7 +4,7 @@ seoTitle: "Python & VS Code Virtual Environments Windows 10"
 seoDescription: "Python & VS Code Virtual Environments Windows 10"
 datePublished: Sun Mar 10 2024 19:47:04 GMT+0000 (Coordinated Universal Time)
 cuid: cltlxefjw000t09jy4ygd9jwb
-slug: using-virtual-environments-with-pip-on-windows-10-and-vs-codeenglish
+slug: mint-pyhon-pip
 cover: https://cdn.hashnode.com/res/hashnode/image/upload/v1710101201378/a8560080-6777-4674-be93-c2bd8b2a9684.png
 ogImage: https://cdn.hashnode.com/res/hashnode/image/upload/v1710101643148/9cc36e61-5728-4556-a8da-8852d6f8726a.png
 tags: python, developer
