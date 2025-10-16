@@ -69,41 +69,41 @@ Wooble เป็นแอปโซเชียลมีเดียที่ม�
 
 ## **ภาพหน้าจอ**
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w1.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w1.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w1.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w2.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w2.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w2.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w3.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w3.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w3.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w4.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w4.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w4.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w5.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w5.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w5.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w6.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w6.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w6.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w7.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w7.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w7.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w8.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w8.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w8.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w9.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w9.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w9.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w10.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w10.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w10.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w11.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w11.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w11.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w12.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w12.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w12.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w13.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w13.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w13.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w14.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w14.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w14.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w15.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w15.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w15.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w16.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w16.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w16.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w17.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w17.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w17.png)
 
-[![](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w18.png align="left")](https://github.com/CharlyKeleb/SocialMedia-App/blob/main/ss/w18.png)
+![Image](https://github.com/CharlyKeleb/SocialMedia-App/raw/main/ss/w18.png)
 
 ## พอเเ่นี้ ข้างล่างจะงง ไม่ต้องอ่านครับ!! ผมจะสตีมสด **Firebase ไม่ชอบตรงไหนค่อยบอกไปเรื่อยๆ**
 
