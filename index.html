@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>เช็ครีส – รุ่งโรจน์คาร์เร้นท์</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --error: #dc2626;
+      --radius: 14px;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sarabun', 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 18px 20px 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    }
+    header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; }
+    header p  { font-size: .85rem; opacity: .85; margin-top: 2px; }
+
+    main {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.08);
+    }
+
+    .card h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      color: var(--text);
+      background: #f8fafc;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    button.btn-primary {
+      width: 100%;
+      padding: 14px;
+      margin-top: 14px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button.btn-primary:active { background: var(--primary-dark); transform: scale(.98); }
+
+    #result {
+      display: none;
+      animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: .82rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+    .status-active   { background: #dcfce7; color: var(--success); }
+    .status-expired  { background: #fee2e2; color: var(--error); }
+    .status-pending  { background: #fef9c3; color: #92400e; }
+
+    .info-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    .info-table tr td { padding: 9px 4px; border-bottom: 1px solid var(--border); font-size: .92rem; }
+    .info-table tr:last-child td { border-bottom: none; }
+    .info-table td:first-child { color: var(--muted); font-weight: 600; width: 45%; }
+
+    .not-found {
+      text-align: center;
+      color: var(--error);
+      font-weight: 600;
+      padding: 10px 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 18px 16px;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header>
+  <h1>🚗 เช็คสัญญาเช่ารถ</h1>
+  <p>รุ่งโรจน์คาร์เร้นท์ · อุดรธานี</p>
+</header>
+
+<main>
+  <div class="card">
+    <h2>🔍 ค้นหาสัญญา</h2>
+    <label for="refInput">เลขที่สัญญา / รหัสอ้างอิง</label>
+    <input type="text" id="refInput" placeholder="เช่น RR-20250101-001" autocomplete="off" />
+    <button class="btn-primary" onclick="checkLease()">ตรวจสอบ</button>
+  </div>
+
+  <div class="card" id="result">
+    <h2 id="resultTitle">ผลการค้นหา</h2>
+    <div id="resultContent"></div>
+  </div>
+
+  <div class="card">
+    <h2>📞 ติดต่อ</h2>
+    <table class="info-table">
+      <tr><td>โทรศัพท์</td><td><a href="tel:042000000">042-000-000</a></td></tr>
+      <tr><td>LINE OA</td><td>@rungrojcarrental</td></tr>
+      <tr><td>ที่อยู่</td><td>อุดรธานี</td></tr>
+    </table>
+  </div>
+</main>
+
+<footer>© 2025 รุ่งโรจน์คาร์เร้นท์ · pripramot/license</footer>
+
+<script>
+  // ─── Demo data (replace with real API call when backend is ready) ───────────
+  const LEASES = {
+    "RR-20250101-001": {
+      name: "สมชาย ใจดี",
+      car: "Toyota Yaris Ativ สีขาว",
+      plate: "กข 1234 อุดรธานี",
+      start: "01/01/2568",
+      end: "07/01/2568",
+      amount: "2,100 บาท",
+      status: "expired"
+    },
+    "RR-20250410-002": {
+      name: "สมหญิง รักดี",
+      car: "Honda City สีดำ",
+      plate: "ขค 5678 อุดรธานี",
+      start: "10/04/2568",
+      end: "15/04/2568",
+      amount: "1,500 บาท",
+      status: "active"
+    },
+    "RR-20250415-003": {
+      name: "มานะ พยายาม",
+      car: "Nissan Almera สีเทา",
+      plate: "คง 9012 อุดรธานี",
+      start: "15/04/2568",
+      end: "20/04/2568",
+      amount: "1,750 บาท",
+      status: "pending"
+    }
+  };
+
+  const STATUS_LABEL = {
+    active:  { text: "กำลังเช่า",  cls: "status-active" },
+    expired: { text: "สิ้นสุดแล้ว", cls: "status-expired" },
+    pending: { text: "รอรับรถ",    cls: "status-pending" }
+  };
+
+  function checkLease() {
+    const ref = document.getElementById("refInput").value.trim().toUpperCase();
+    const resultBox = document.getElementById("result");
+    const titleEl  = document.getElementById("resultTitle");
+    const contentEl = document.getElementById("resultContent");
+
+    if (!ref) {
+      alert("กรุณากรอกเลขที่สัญญาหรือรหัสอ้างอิง");
+      return;
+    }
+
+    const lease = LEASES[ref];
+    resultBox.style.display = "block";
+
+    if (!lease) {
+      titleEl.innerHTML = "ผลการค้นหา";
+      contentEl.innerHTML = `<p class="not-found">❌ ไม่พบข้อมูลสัญญา "${ref}"<br><small style="font-weight:400;color:var(--muted)">กรุณาตรวจสอบรหัสอีกครั้ง หรือติดต่อเจ้าหน้าที่</small></p>`;
+      return;
+    }
+
+    const s = STATUS_LABEL[lease.status] || { text: lease.status, cls: "" };
+    titleEl.innerHTML = `ข้อมูลสัญญา <span class="status-badge ${s.cls}">${s.text}</span>`;
+    contentEl.innerHTML = `
+      <table class="info-table">
+        <tr><td>เลขที่สัญญา</td><td>${ref}</td></tr>
+        <tr><td>ชื่อผู้เช่า</td><td>${lease.name}</td></tr>
+        <tr><td>รถที่เช่า</td><td>${lease.car}</td></tr>
+        <tr><td>ทะเบียน</td><td>${lease.plate}</td></tr>
+        <tr><td>วันที่รับรถ</td><td>${lease.start}</td></tr>
+        <tr><td>วันที่คืนรถ</td><td>${lease.end}</td></tr>
+        <tr><td>ค่าเช่า</td><td>${lease.amount}</td></tr>
+      </table>`;
+
+    resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("refInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") checkLease();
+  });
+</script>
+</body>
+</html>
