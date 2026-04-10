@@ -1,262 +1,307 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>เช็ครีส – รุ่งโรจน์คาร์เร้นท์</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pol.Lt.Col.Gittisak Wannakeeree — เช็กลิสต์การเชื่อมต่อทุกหน้า</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0A0A12; color:#fff; font-family:'Segoe UI',sans-serif; padding:20px; }
+  h1 { text-align:center; color:#FF2D78; font-size:24px; margin-bottom:6px; }
+  .subtitle { text-align:center; color:#aaa; font-size:13px; margin-bottom:24px; }
+  .stats { display:flex; gap:12px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+  .stat { background:#16161E; border-radius:12px; padding:12px 20px; text-align:center; min-width:100px; }
+  .stat .num { font-size:28px; font-weight:700; color:#FF2D78; }
+  .stat .label { font-size:11px; color:#aaa; margin-top:2px; }
+  .stat.ok .num { color:#00FFC2; }
+  .stat.warn .num { color:#FFE500; }
+  .progress-bar { background:#1E1E28; border-radius:8px; height:8px; margin-bottom:24px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#FF2D78,#FF6B6B); border-radius:8px; transition:width .4s; }
 
-    :root {
-      --primary: #1a56db;
-      --primary-dark: #1e40af;
-      --accent: #f59e0b;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #1e293b;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --success: #16a34a;
-      --error: #dc2626;
-      --radius: 14px;
-    }
+  .section { margin-bottom:20px; }
+  .section-title { font-size:16px; font-weight:700; color:#2979FF; margin-bottom:10px; padding-left:8px; border-left:3px solid #2979FF; }
+  .card { background:#16161E; border-radius:14px; margin-bottom:8px; overflow:hidden; transition:all .2s; }
+  .card:hover { background:#1E1E28; }
+  .card-header { display:flex; align-items:center; padding:12px 16px; cursor:pointer; gap:10px; }
+  .card-header .idx { background:#FF2D78; color:#fff; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+  .card-header .name { flex:1; font-weight:600; font-size:14px; }
+  .card-header .route { color:#00FFC2; font-size:12px; font-family:monospace; background:#0A0A12; padding:2px 8px; border-radius:6px; }
+  .card-header .status { font-size:18px; }
+  .card-body { display:none; padding:0 16px 12px 54px; }
+  .card.open .card-body { display:block; }
 
-    html, body {
-      width: 100%;
-      min-height: 100dvh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Sarabun', 'Segoe UI', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-    }
+  .check-item { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid #2C2C2E; }
+  .check-item:last-child { border:none; }
+  .check-item input[type=checkbox] { width:18px; height:18px; accent-color:#FF2D78; cursor:pointer; flex-shrink:0; }
+  .check-item label { font-size:13px; color:#ccc; cursor:pointer; flex:1; }
+  .check-item label.checked { text-decoration:line-through; color:#555; }
+  .check-item .tag { font-size:10px; padding:2px 6px; border-radius:4px; flex-shrink:0; }
+  .tag-nav { background:#2979FF33; color:#2979FF; }
+  .tag-ui { background:#FF2D7833; color:#FF2D78; }
+  .tag-api { background:#00FFC233; color:#00FFC2; }
+  .tag-critical { background:#FF453A33; color:#FF453A; }
+  .tag-done { background:#00FFC233; color:#00FFC2; }
 
-    header {
-      background: var(--primary);
-      color: #fff;
-      padding: 18px 20px 14px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,.18);
-    }
-    header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; }
-    header p  { font-size: .85rem; opacity: .85; margin-top: 2px; }
+  .icon-section { margin-top:20px; }
+  .icon-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px; }
+  .icon-item { background:#16161E; border-radius:10px; padding:10px 14px; display:flex; align-items:center; gap:10px; }
+  .icon-item .file { font-family:monospace; font-size:12px; color:#FFE500; }
+  .icon-item .size { color:#aaa; font-size:12px; }
+  .icon-item .loc { color:#00FFC2; font-size:11px; }
+  .icon-item input[type=checkbox] { width:16px; height:16px; accent-color:#00FFC2; }
 
-    main {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 22px 18px;
-      box-shadow: 0 1px 6px rgba(0,0,0,.08);
-    }
-
-    .card h2 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      color: var(--primary-dark);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    label {
-      display: block;
-      font-size: .88rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 1rem;
-      color: var(--text);
-      background: #f8fafc;
-      transition: border-color .2s;
-      -webkit-appearance: none;
-    }
-    input[type="text"]:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: #fff;
-    }
-
-    button.btn-primary {
-      width: 100%;
-      padding: 14px;
-      margin-top: 14px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s, transform .1s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    button.btn-primary:active { background: var(--primary-dark); transform: scale(.98); }
-
-    #result {
-      display: none;
-      animation: fadeIn .3s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: .82rem;
-      font-weight: 700;
-      margin-left: 8px;
-    }
-    .status-active   { background: #dcfce7; color: var(--success); }
-    .status-expired  { background: #fee2e2; color: var(--error); }
-    .status-pending  { background: #fef9c3; color: #92400e; }
-
-    .info-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
-    .info-table tr td { padding: 9px 4px; border-bottom: 1px solid var(--border); font-size: .92rem; }
-    .info-table tr:last-child td { border-bottom: none; }
-    .info-table td:first-child { color: var(--muted); font-weight: 600; width: 45%; }
-
-    .not-found {
-      text-align: center;
-      color: var(--error);
-      font-weight: 600;
-      padding: 10px 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 18px 16px;
-      font-size: .78rem;
-      color: var(--muted);
-    }
-  </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet" />
+  .footer { text-align:center; color:#555; font-size:11px; margin-top:30px; padding-top:16px; border-top:1px solid #2C2C2E; }
+</style>
 </head>
 <body>
 
-<header>
-  <h1>🚗 เช็คสัญญาเช่ารถ</h1>
-  <p>รุ่งโรจน์คาร์เร้นท์ · อุดรธานี</p>
-</header>
+<h1>Embedding — เช็กลิสต์</h1>
+<p class="subtitle">รถเช่าอุดรธานี รุ่งโรจน์คาร์เร้นท์ | PromptPay: 0963638519</p>
 
-<main>
-  <div class="card">
-    <h2>🔍 ค้นหาสัญญา</h2>
-    <label for="refInput">เลขที่สัญญา / รหัสอ้างอิง</label>
-    <input type="text" id="refInput" placeholder="เช่น RR-20250101-001" autocomplete="off" />
-    <button class="btn-primary" onclick="checkLease()">ตรวจสอบ</button>
+<div class="stats">
+  <div class="stat" id="stat-total"><div class="num" id="num-total">0</div><div class="label">รายการทั้งหมด</div></div>
+  <div class="stat ok" id="stat-done"><div class="num" id="num-done">0</div><div class="label">เสร็จแล้ว</div></div>
+  <div class="stat warn" id="stat-remain"><div class="num" id="num-remain">0</div><div class="label">เหลือ</div></div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div id="app"></div>
+
+<div class="section icon-section">
+  <div class="section-title">Web Icons — ตำแหน่งวางไฟล์</div>
+  <div class="icon-grid">
+    <div class="icon-item"><input type="checkbox" class="chk" /><div><div class="file">favicon.png</div><div class="size">16×16px</div><div class="loc">→ web/favicon.png</div></div></div>
+    <div class="icon-item"><input type="checkbox" class="chk" /><div><div class="file">Icon-192.png</div><div class="size">192×192px</div><div class="loc">→ web/icons/Icon-192.png</div></div></div>
+    <div class="icon-item"><input type="checkbox" class="chk" /><div><div class="file">Icon-512.png</div><div class="size">512×512px</div><div class="loc">→ web/icons/Icon-512.png</div></div></div>
+    <div class="icon-item"><input type="checkbox" class="chk" /><div><div class="file">Icon-maskable-192.png</div><div class="size">192×192px</div><div class="loc">→ web/icons/Icon-maskable-192.png</div></div></div>
+    <div class="icon-item"><input type="checkbox" class="chk" /><div><div class="file">Icon-maskable-512.png</div><div class="size">512×512px</div><div class="loc">→ web/icons/Icon-maskable-512.png</div></div></div>
+    <div class="icon-item"><input type="checkbox" class="chk" /><div><div class="file">manifest.json</div><div class="size">ตรวจ path icon</div><div class="loc">→ web/manifest.json</div></div></div>
   </div>
+</div>
 
-  <div class="card" id="result">
-    <h2 id="resultTitle">ผลการค้นหา</h2>
-    <div id="resultContent"></div>
-  </div>
-
-  <div class="card">
-    <h2>📞 ติดต่อ</h2>
-    <table class="info-table">
-      <tr><td>โทรศัพท์</td><td><a href="tel:042000000">042-000-000</a></td></tr>
-      <tr><td>LINE OA</td><td>@rungrojcarrental</td></tr>
-      <tr><td>ที่อยู่</td><td>อุดรธานี</td></tr>
-    </table>
-  </div>
-</main>
-
-<footer>© 2025 รุ่งโรจน์คาร์เร้นท์ · pripramot/license</footer>
+<div class="footer">RungRoj Project — รถเช่าอุดรธานี รุ่งโรจน์คาร์เร้นท์ — Updated: April 2026</div>
 
 <script>
-  // ─── Demo data (replace with real API call when backend is ready) ───────────
-  const LEASES = {
-    "RR-20250101-001": {
-      name: "สมชาย ใจดี",
-      car: "Toyota Yaris Ativ สีขาว",
-      plate: "กข 1234 อุดรธานี",
-      start: "01/01/2568",
-      end: "07/01/2568",
-      amount: "2,100 บาท",
-      status: "expired"
-    },
-    "RR-20250410-002": {
-      name: "สมหญิง รักดี",
-      car: "Honda City สีดำ",
-      plate: "ขค 5678 อุดรธานี",
-      start: "10/04/2568",
-      end: "15/04/2568",
-      amount: "1,500 บาท",
-      status: "active"
-    },
-    "RR-20250415-003": {
-      name: "มานะ พยายาม",
-      car: "Nissan Almera สีเทา",
-      plate: "คง 9012 อุดรธานี",
-      start: "15/04/2568",
-      end: "20/04/2568",
-      amount: "1,750 บาท",
-      status: "pending"
-    }
-  };
-
-  const STATUS_LABEL = {
-    active:  { text: "กำลังเช่า",  cls: "status-active" },
-    expired: { text: "สิ้นสุดแล้ว", cls: "status-expired" },
-    pending: { text: "รอรับรถ",    cls: "status-pending" }
-  };
-
-  function checkLease() {
-    const ref = document.getElementById("refInput").value.trim().toUpperCase();
-    const resultBox = document.getElementById("result");
-    const titleEl  = document.getElementById("resultTitle");
-    const contentEl = document.getElementById("resultContent");
-
-    if (!ref) {
-      alert("กรุณากรอกเลขที่สัญญาหรือรหัสอ้างอิง");
-      return;
-    }
-
-    const lease = LEASES[ref];
-    resultBox.style.display = "block";
-
-    if (!lease) {
-      titleEl.innerHTML = "ผลการค้นหา";
-      contentEl.innerHTML = `<p class="not-found">❌ ไม่พบข้อมูลสัญญา "${ref}"<br><small style="font-weight:400;color:var(--muted)">กรุณาตรวจสอบรหัสอีกครั้ง หรือติดต่อเจ้าหน้าที่</small></p>`;
-      return;
-    }
-
-    const s = STATUS_LABEL[lease.status] || { text: lease.status, cls: "" };
-    titleEl.innerHTML = `ข้อมูลสัญญา <span class="status-badge ${s.cls}">${s.text}</span>`;
-    contentEl.innerHTML = `
-      <table class="info-table">
-        <tr><td>เลขที่สัญญา</td><td>${ref}</td></tr>
-        <tr><td>ชื่อผู้เช่า</td><td>${lease.name}</td></tr>
-        <tr><td>รถที่เช่า</td><td>${lease.car}</td></tr>
-        <tr><td>ทะเบียน</td><td>${lease.plate}</td></tr>
-        <tr><td>วันที่รับรถ</td><td>${lease.start}</td></tr>
-        <tr><td>วันที่คืนรถ</td><td>${lease.end}</td></tr>
-        <tr><td>ค่าเช่า</td><td>${lease.amount}</td></tr>
-      </table>`;
-
-    resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
+const data = [
+  {
+    section: "Core Screens (GoRouter)",
+    items: [
+      { idx:1, name:"OnboardingScreen", route:"/", file:"onboarding_screen.dart", checks:[
+        {t:"GoRouter route '/' registered",tag:"nav"},
+        {t:"ปุ่ม 'เริ่มต้นใช้งาน' → context.go('/home')",tag:"nav"},
+        {t:"PDPA consent check ก่อนเข้า home",tag:"critical"},
+        {t:"Logo แสดงถูกต้อง (assets/images/logo.png)",tag:"ui"},
+        {t:"ชื่อร้าน 'รถเช่าอุดรธานี รุ่งโรจน์คาร์เร้นท์' ตรง",tag:"critical"},
+      ]},
+      { idx:2, name:"HomeScreen", route:"/home", file:"home_screen.dart", checks:[
+        {t:"GoRouter route '/home' registered",tag:"nav"},
+        {t:"Bottom nav → /rdrive, /cars, /bookings, /settings",tag:"nav"},
+        {t:"กดรถ → context.go('/car/\${id}')",tag:"nav"},
+        {t:"ปุ่ม + → context.go('/add')",tag:"nav"},
+        {t:"แสดงข้อมูลรถจาก Firestore",tag:"api"},
+        {t:"ค้นหารถทำงาน",tag:"ui"},
+      ]},
+      { idx:3, name:"RDriveDashboard", route:"/rdrive", file:"r_drive_dashboard.dart", checks:[
+        {t:"GoRouter route '/rdrive' registered",tag:"nav"},
+        {t:"กราฟรายได้แสดงถูกต้อง (fl_chart)",tag:"ui"},
+        {t:"กดรถ → context.go('/car/\${id}')",tag:"nav"},
+        {t:"ลิงก์ → /finance, /payments",tag:"nav"},
+        {t:"สถิติรถ (ว่าง/เช่า/ซ่อม) ถูกต้อง",tag:"api"},
+      ]},
+      { idx:4, name:"CarDetailsScreen", route:"/car/:id", file:"car_details_screen.dart", checks:[
+        {t:"GoRouter route '/car/:id' + pathParameters",tag:"nav"},
+        {t:"โหลดข้อมูลรถจาก Firestore ด้วย carId",tag:"api"},
+        {t:"ปุ่ม NFC → context.go('/nfc/\${id}')",tag:"nav"},
+        {t:"ปุ่ม QR → context.go('/qr/\${bookingId}')",tag:"nav"},
+        {t:"ปุ่มชำระเงิน → context.go('/promptpay?amount=X&bookingId=Y')",tag:"nav"},
+        {t:"ปุ่มตรวจบัตร → context.go('/national-id/\${bookingId}')",tag:"nav"},
+        {t:"รูปภาพรถแสดงถูกต้อง",tag:"ui"},
+        {t:"ราคา ฿ format ถูกต้อง (บาท/วัน)",tag:"ui"},
+      ]},
+      { idx:5, name:"AddListingScreen", route:"/add", file:"add_listing_screen.dart", checks:[
+        {t:"GoRouter route '/add' registered",tag:"nav"},
+        {t:"ฟอร์มกรอกข้อมูลรถครบ (ชื่อ, ราคา, รูป, เกียร์, เชื้อเพลิง)",tag:"ui"},
+        {t:"บันทึกลง Firestore collection 'cars'",tag:"api"},
+        {t:"อัปโหลดรูปภาพ → Firebase Storage",tag:"api"},
+        {t:"Validation ฟอร์ม (ไม่ปล่อยว่าง)",tag:"ui"},
+        {t:"บันทึกสำเร็จ → กลับไป /home หรือ /rdrive",tag:"nav"},
+      ]},
+      { idx:6, name:"FinancialReportsScreen", route:"/finance", file:"financial_reports_screen.dart", checks:[
+        {t:"GoRouter route '/finance' registered",tag:"nav"},
+        {t:"กราฟรายได้ (BarChart) แสดงถูกต้อง",tag:"ui"},
+        {t:"กราฟค่าใช้จ่าย (PieChart/Donut) แสดงถูกต้อง",tag:"ui"},
+        {t:"ข้อมูลจาก Firestore ถูกต้อง",tag:"api"},
+        {t:"ปุ่มกลับ / AppBar back",tag:"nav"},
+      ]},
+      { idx:7, name:"PaymentHistoryScreen", route:"/payments", file:"payment_history_screen.dart", checks:[
+        {t:"GoRouter route '/payments' registered",tag:"nav"},
+        {t:"รายการชำระเงิน list แสดงถูกต้อง",tag:"ui"},
+        {t:"กราฟแนวโน้ม (LineChart/BarChart)",tag:"ui"},
+        {t:"ข้อมูลจาก Firestore",tag:"api"},
+        {t:"ปุ่มกลับ / AppBar back",tag:"nav"},
+      ]},
+      { idx:8, name:"ActiveBookingsScreen", route:"/bookings", file:"active_bookings_screen.dart", checks:[
+        {t:"GoRouter route '/bookings' registered",tag:"nav"},
+        {t:"รายการจองปัจจุบัน แสดงถูกต้อง",tag:"ui"},
+        {t:"กดจอง → context.go('/car/\${carId}')",tag:"nav"},
+        {t:"สถานะจอง (active/completed/cancelled) ถูกต้อง",tag:"ui"},
+        {t:"ข้อมูลจาก Firestore collection 'bookings'",tag:"api"},
+      ]},
+      { idx:9, name:"CarDirectoryScreen", route:"/cars", file:"car_directory_screen.dart", checks:[
+        {t:"GoRouter route '/cars' registered",tag:"nav"},
+        {t:"รายการรถทั้งหมด แสดงถูกต้อง",tag:"ui"},
+        {t:"Filter (ประเภท, เชื้อเพลิง, สถานะ) ทำงาน",tag:"ui"},
+        {t:"กดรถ → context.go('/car/\${id}')",tag:"nav"},
+        {t:"ข้อมูลจาก Firestore",tag:"api"},
+      ]},
+      { idx:10, name:"SettingsScreen", route:"/settings", file:"settings_screen.dart", checks:[
+        {t:"GoRouter route '/settings' registered",tag:"nav"},
+        {t:"โปรไฟล์ผู้ใช้แสดงถูกต้อง",tag:"ui"},
+        {t:"เปิด/ปิดแจ้งเตือน",tag:"ui"},
+        {t:"Logout → กลับ '/'",tag:"nav"},
+        {t:"ลิงก์ Privacy Policy",tag:"ui"},
+      ]},
+    ]
+  },
+  {
+    section: "Feature Screens (NFC / QR / PromptPay / National ID)",
+    items: [
+      { idx:11, name:"NfcScanScreen", route:"/nfc/:id", file:"nfc_scan_screen.dart", checks:[
+        {t:"GoRouter route '/nfc/:id' + pathParameters",tag:"nav"},
+        {t:"NFC scan/read ทำงาน (Android)",tag:"api"},
+        {t:"บันทึกผล NFC ลง Firestore",tag:"api"},
+        {t:"แสดงสถานะ checkin/checkout",tag:"ui"},
+        {t:"ปุ่มกลับ → car details",tag:"nav"},
+      ]},
+      { idx:12, name:"QrScanScreen", route:"/qr/:bookingId", file:"qr_scan_screen.dart", checks:[
+        {t:"GoRouter route '/qr/:bookingId' + pathParameters",tag:"nav"},
+        {t:"Camera permission request",tag:"api"},
+        {t:"QR scan ทำงาน",tag:"ui"},
+        {t:"บันทึกผล QR ลง Firestore",tag:"api"},
+        {t:"ปุ่มกลับ",tag:"nav"},
+      ]},
+      { idx:13, name:"PromptPayScreen", route:"/promptpay", file:"promptpay_screen.dart", checks:[
+        {t:"GoRouter route '/promptpay' + query params (amount, bookingId)",tag:"nav"},
+        {t:"QR Code PromptPay แสดงถูกต้อง",tag:"ui"},
+        {t:"เลข PromptPay = 0963638519",tag:"critical"},
+        {t:"ยอดเงินแสดงถูกต้อง (฿ format)",tag:"ui"},
+        {t:"ปุ่ม 'ชำระแล้ว' → อัปเดต Firestore",tag:"api"},
+        {t:"ปุ่มกลับ",tag:"nav"},
+      ]},
+      { idx:14, name:"NationalIdScreen", route:"/national-id/:bookingId", file:"national_id_screen.dart", checks:[
+        {t:"GoRouter route '/national-id/:bookingId' + pathParameters",tag:"nav"},
+        {t:"Camera permission สำหรับถ่ายบัตร",tag:"api"},
+        {t:"OCR / บันทึกรูปบัตร",tag:"api"},
+        {t:"บันทึกลง Firestore",tag:"api"},
+        {t:"ปุ่มกลับ",tag:"nav"},
+      ]},
+    ]
+  },
+  {
+    section: "System & Config",
+    items: [
+      { idx:15, name:"PdpaConsentScreen", route:"/pdpa", file:"pdpa_consent_screen.dart", checks:[
+        {t:"GoRouter route '/pdpa' registered",tag:"nav"},
+        {t:"ข้อความ PDPA ภาษาไทยครบถ้วน",tag:"ui"},
+        {t:"ปุ่มยอมรับ → บันทึก SharedPrefs + Firestore",tag:"api"},
+        {t:"ยอมรับแล้ว → context.go('/home')",tag:"nav"},
+      ]},
+      { idx:16, name:"app_router.dart", route:"—", file:"lib/router/app_router.dart", checks:[
+        {t:"import ครบทุก screen (15 ไฟล์)",tag:"critical"},
+        {t:"initialLocation = '/home' หรือ '/'",tag:"nav"},
+        {t:"errorBuilder แสดงหน้า 404 ภาษาไทย",tag:"ui"},
+        {t:"ไม่มี route ซ้ำ",tag:"nav"},
+      ]},
+      { idx:17, name:"main.dart", route:"—", file:"lib/main.dart", checks:[
+        {t:"MaterialApp.router ใช้ appRouter",tag:"nav"},
+        {t:"Firebase.initializeApp (uncomment เมื่อมี config)",tag:"api"},
+        {t:"Theme dark mode ถูกต้อง",tag:"ui"},
+        {t:"NotoSansThai font fallback",tag:"ui"},
+      ]},
+      { idx:18, name:"manifest.json", route:"—", file:"web/manifest.json", checks:[
+        {t:"icons path ชี้ไปที่ icons/Icon-192.png",tag:"ui"},
+        {t:"icons path ชี้ไปที่ icons/Icon-512.png",tag:"ui"},
+        {t:"maskable icons path ถูกต้อง",tag:"ui"},
+        {t:"name = 'RungRoj'",tag:"ui"},
+      ]},
+    ]
+  },
+  {
+    section: "ไฟล์ที่ไม่ได้เชื่อมต่อ (ตรวจสอบ)",
+    items: [
+      { idx:"?", name:"cart_screen.dart", route:"ไม่มี route", file:"cart_screen.dart", checks:[
+        {t:"ไม่มี GoRouter route — ลบออกหรือเพิ่ม route?",tag:"critical"},
+        {t:"ไม่มี import ใน app_router.dart",tag:"critical"},
+      ]},
+      { idx:"?", name:"bank_account_screen.dart", route:"ไม่มี route", file:"bank_account_screen.dart", checks:[
+        {t:"ไม่มี GoRouter route — ลบออกหรือเพิ่ม route?",tag:"critical"},
+        {t:"ไม่มี import ใน app_router.dart",tag:"critical"},
+      ]},
+    ]
   }
+];
 
-  document.getElementById("refInput").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") checkLease();
+const tagClass = {nav:"tag-nav",ui:"tag-ui",api:"tag-api",critical:"tag-critical"};
+const tagLabel = {nav:"NAV",ui:"UI",api:"API",critical:"❗"};
+let app = document.getElementById('app');
+
+data.forEach(sec => {
+  let html = `<div class="section"><div class="section-title">${sec.section}</div>`;
+  sec.items.forEach(item => {
+    html += `<div class="card" id="card-${item.idx}">
+      <div class="card-header" onclick="toggle('card-${item.idx}')">
+        <div class="idx">${item.idx}</div>
+        <div class="name">${item.name}</div>
+        <div class="route">${item.route}</div>
+        <div class="status" id="status-${item.idx}">⬜</div>
+      </div>
+      <div class="card-body">`;
+    item.checks.forEach((c,ci) => {
+      const uid = `chk-${item.idx}-${ci}`;
+      html += `<div class="check-item">
+        <input type="checkbox" class="chk" id="${uid}" onchange="update()">
+        <label for="${uid}" id="lbl-${uid}">${c.t}</label>
+        <span class="tag ${tagClass[c.tag]||''}">${tagLabel[c.tag]||c.tag}</span>
+      </div>`;
+    });
+    html += `</div></div>`;
   });
+  html += `</div>`;
+  app.innerHTML += html;
+});
+
+function toggle(id) { document.getElementById(id).classList.toggle('open'); }
+
+function update() {
+  const all = document.querySelectorAll('.chk');
+  const checked = document.querySelectorAll('.chk:checked');
+  const total = all.length;
+  const done = checked.length;
+  document.getElementById('num-total').textContent = total;
+  document.getElementById('num-done').textContent = done;
+  document.getElementById('num-remain').textContent = total - done;
+  document.getElementById('progress').style.width = (total?((done/total)*100):0) + '%';
+
+  // update card status
+  data.forEach(sec => {
+    sec.items.forEach(item => {
+      const cardChecks = document.querySelectorAll(`[id^="chk-${item.idx}-"]`);
+      const cardDone = [...cardChecks].filter(c=>c.checked).length;
+      const st = document.getElementById(`status-${item.idx}`);
+      if(cardDone === cardChecks.length && cardChecks.length > 0) st.textContent = '✅';
+      else if(cardDone > 0) st.textContent = '🔶';
+      else st.textContent = '⬜';
+    });
+  });
+
+  // update labels
+  all.forEach(c => {
+    const lbl = document.getElementById('lbl-'+c.id);
+    if(lbl) { c.checked ? lbl.classList.add('checked') : lbl.classList.remove('checked'); }
+  });
+}
+
+update();
 </script>
 </body>
 </html>
