@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Internet Threats Insights | ThreatLabz</title>
+  <meta name="description" content="Real-time global internet threat intelligence dashboard with interactive 3D globe visualization">
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #000a12;
+      --bg-secondary: #001020;
+      --bg-card: rgba(0, 19, 36, 0.75);
+      --bg-card-hover: rgba(0, 30, 55, 0.85);
+      --border-color: rgba(0, 169, 224, 0.15);
+      --text-primary: #e8eaf0;
+      --text-secondary: #a0a0a0;
+      --text-muted: #607080;
+      --accent-blue: #00A9E0;
+      --accent-orange: #FF8A00;
+      --accent-green: #42c67e;
+      --accent-red: #e95e6c;
+      --accent-yellow: #FFD700;
+      --accent-purple: #8a5cf5;
+      --accent-cyan: #00d4ff;
+      --accent-pink: #ff6b9d;
+      --color-exploit: #42c67e;
+      --color-malware: #FF8A00;
+      --color-botnet: #FFD700;
+      --color-virus: #42c67e;
+      --color-phishing: #e95e6c;
+      --panel-width: 220px;
+      --header-height: 48px;
+      --font-main: 'Spline Sans', sans-serif;
+      --glow-blue: 0 0 20px rgba(0, 169, 224, 0.3);
+      --glow-orange: 0 0 15px rgba(255, 138, 0, 0.25);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at center, #001f3f 0%, #000a12 100%);
+      color: var(--text-primary);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      height: var(--header-height);
+      background: #000a12;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-logo svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .header-logo .brand {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.5px;
+    }
+
+    .header-logo .brand span {
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .header-nav a:hover, .header-nav a.active {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .header-nav a .arrow {
+      font-size: 8px;
+      opacity: 0.5;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-actions button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-actions button:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main-container {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ===== SIDEBARS ===== */
+    .sidebar {
+      width: var(--panel-width);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      z-index: 10;
+    }
+
+    .sidebar-left { align-items: flex-start; }
+    .sidebar-right { align-items: flex-end; }
+
+    /* ===== PANELS ===== */
+    .panel {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .panel:hover {
+      border-color: rgba(255, 255, 255, 0.1);
+      background: var(--bg-card-hover);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .panel-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .panel-search {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .panel-search:hover {
+      color: var(--accent-blue);
+      background: rgba(0, 156, 218, 0.1);
+    }
+
+    .panel-body {
+      padding: 6px 0;
+    }
+
+    /* ===== THREAT NAME ITEMS ===== */
+    .threat-name-item {
+      display: flex;
+      align-items: center;
+      padding: 7px 14px;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .threat-name-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-left-color: var(--accent-blue);
+    }
+
+    .threat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px currentColor;
+    }
+
+    .threat-name-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .threat-name-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .threat-name-type {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .threat-info-icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .threat-info-icon:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    /* ===== COUNTRY ITEMS (Origins / Targets) ===== */
+    .country-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 14px;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .country-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .country-rank {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .country-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .country-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .country-pct {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .country-bar-wrap {
+      width: 70px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .country-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease;
+    }
+
+    /* ===== CATEGORY ITEMS ===== */
+    .category-item {
+      display: flex;
+      align-items: center;
+      padding: 7px 14px;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .category-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .category-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .category-dot::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 1px solid currentColor;
+      opacity: 0.3;
+    }
+
+    .category-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .category-name {
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .category-pct {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .category-bar-wrap {
+      width: 80px;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .category-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1.2s ease;
+    }
+
+    /* ===== GLOBE CENTER ===== */
+    .globe-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .globe-title {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    .globe-title h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: var(--text-primary);
+      text-shadow: 0 2px 30px rgba(0, 156, 218, 0.3);
+    }
+
+    .globe-title .powered {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    #globe-canvas {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    #globe-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* ===== GLOBE CONTROLS ===== */
+    .globe-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 5;
+    }
+
+    .sort-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: rgba(15, 20, 40, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .sort-control:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(20, 28, 55, 0.8);
+    }
+
+    .sort-control svg {
+      width: 14px;
+      height: 14px;
+      color: var(--accent-blue);
+    }
+
+    .sort-control span {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .sort-control .arrow-down {
+      font-size: 8px;
+      margin-left: 2px;
+    }
+
+    .zoom-controls {
+      display: flex;
+      gap: 2px;
+    }
+
+    .zoom-btn {
+      width: 32px;
+      height: 32px;
+      background: rgba(15, 20, 40, 0.7);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .zoom-btn:first-child { border-radius: 8px 0 0 8px; }
+    .zoom-btn:last-child { border-radius: 0 8px 8px 0; }
+
+    .zoom-btn:hover {
+      background: rgba(20, 28, 55, 0.8);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===== LIVE INDICATOR ===== */
+    .live-indicator {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(15, 20, 40, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      z-index: 5;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #42c67e;
+      animation: pulse-live 2s ease infinite;
+    }
+
+    @keyframes pulse-live {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(66, 198, 126, 0.6); }
+      50% { box-shadow: 0 0 0 6px rgba(66, 198, 126, 0); }
+    }
+
+    .live-text {
+      font-size: 10px;
+      font-weight: 600;
+      color: #42c67e;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .panel {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .sidebar-left .panel:nth-child(1) { animation-delay: 0.1s; }
+    .sidebar-left .panel:nth-child(2) { animation-delay: 0.3s; }
+    .sidebar-right .panel:nth-child(1) { animation-delay: 0.2s; }
+    .sidebar-right .panel:nth-child(2) { animation-delay: 0.4s; }
+
+    /* ===== SCROLLBAR ===== */
+    .panel-body::-webkit-scrollbar { width: 3px; }
+    .panel-body::-webkit-scrollbar-track { background: transparent; }
+    .panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    /* ===== STAT TICKER ===== */
+    .stat-ticker {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 16px;
+      z-index: 5;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 6px 14px;
+      background: rgba(10, 14, 26, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label {
+      font-size: 8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+      .sidebar { width: 190px; }
+      .sidebar { padding: 8px; }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="main-header">
+    <div class="header-logo">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14" stroke="#009cda" stroke-width="2" fill="none"/>
+        <path d="M10 16 L16 10 L22 16 L16 22Z" fill="#009cda"/>
+        <circle cx="16" cy="16" r="3" fill="#0a0e1a"/>
+      </svg>
+      <div class="brand">GTSAlpha<span>| ThreatLabz</span></div>
+    </div>
+
+    <nav class="header-nav" id="main-nav">
+      <a href="#" class="active">Cloud Insights <span class="arrow">▾</span></a>
+      <a href="#">Tools <span class="arrow">▾</span></a>
+      <a href="#">Threats <span class="arrow">▾</span></a>
+      <a href="#">Research <span class="arrow">▾</span></a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="search-btn" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button id="theme-btn" aria-label="Toggle theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-container">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar sidebar-left">
+
+      <!-- THREAT NAMES PANEL -->
+      <div class="panel" id="threat-names-panel">
+        <div class="panel-header">
+          <span class="panel-title">Threat Names</span>
+          <div class="panel-search">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+        </div>
+        <div class="panel-body" id="threat-names-list"></div>
+      </div>
+
+      <!-- THREAT ORIGINS PANEL -->
+      <div class="panel" id="threat-origins-panel">
+        <div class="panel-header">
+          <span class="panel-title">Threat Origins</span>
+          <div class="panel-search">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+        </div>
+        <div class="panel-body" id="threat-origins-list"></div>
+      </div>
+    </aside>
+
+    <!-- GLOBE CENTER -->
+    <div class="globe-container" id="globe-container">
+      <div class="globe-title">
+        <h1>Global Internet Threats Insights</h1>
+        <div class="powered">Powered by GTSAlpha ThreatLabz</div>
+      </div>
+
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        <span class="live-text">Live</span>
+      </div>
+
+      <canvas id="globe-canvas"></canvas>
+
+      <div class="stat-ticker" id="stat-ticker">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-threats">0</div>
+          <div class="stat-label">Threats / sec</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-blocked">0</div>
+          <div class="stat-label">Blocked Today</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-countries">0</div>
+          <div class="stat-label">Countries</div>
+        </div>
+      </div>
+
+      <div class="globe-controls">
+        <div class="sort-control" id="sort-control">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="8" y2="18"/></svg>
+          <span>Sort by: <strong>Trending</strong></span>
+          <span class="arrow-down">▾</span>
+        </div>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="zoom-in" aria-label="Zoom in">+</button>
+          <button class="zoom-btn" id="zoom-out" aria-label="Zoom out">−</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar sidebar-right">
+
+      <!-- THREAT CATEGORIES PANEL -->
+      <div class="panel" id="threat-categories-panel">
+        <div class="panel-header">
+          <span class="panel-title">Threat Categories</span>
+          <div class="panel-search">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+        </div>
+        <div class="panel-body" id="threat-categories-list"></div>
+      </div>
+
+      <!-- THREAT TARGETS PANEL -->
+      <div class="panel" id="threat-targets-panel">
+        <div class="panel-header">
+          <span class="panel-title">Threat Targets</span>
+          <div class="panel-search">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+        </div>
+        <div class="panel-body" id="threat-targets-list"></div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ========================================================
+    // DATA
+    // ========================================================
+    const threatNames = [
+      { name: 'html.exploit.directory', type: 'Browser Exploit', color: '#42c67e' },
+      { name: 'android.trojan.notspend', type: 'Botnet', color: '#e95e6c' },
+      { name: 'html.exploit.cve-2018...', type: 'Browser Exploit', color: '#f0c040' },
+      { name: 'html.exploit.sqlinjectio...', type: 'Malware', color: '#f4732a' },
+      { name: 'html.injection.css-spam', type: 'Malware', color: '#f0c040' },
+      { name: 'js.exploit.shellcode', type: 'Browser Exploit', color: '#42c67e' },
+      { name: 'win32.trojan.emotet', type: 'Trojan', color: '#e95e6c' },
+      { name: 'php.webshell.generic', type: 'Webshell', color: '#8a5cf5' },
+    ];
+
+    const threatOrigins = [
+      { name: 'United States', pct: 1.48, barPct: 95, color: '#42c67e' },
+      { name: 'China', pct: 0.94, barPct: 72, color: '#f0c040' },
+      { name: 'Germany', pct: 0.16, barPct: 35, color: '#42c67e' },
+      { name: 'Netherlands', pct: 0.08, barPct: 22, color: '#f4732a' },
+      { name: 'France', pct: 0.06, barPct: 18, color: '#009cda' },
+      { name: 'Russia', pct: 0.05, barPct: 15, color: '#e95e6c' },
+      { name: 'India', pct: 0.04, barPct: 12, color: '#8a5cf5' },
+    ];
+
+    const threatCategories = [
+      { name: 'Browser Exploit', pct: 0.89, barPct: 98, color: '#42c67e' },
+      { name: 'Malware', pct: 0.62, barPct: 82, color: '#f4732a' },
+      { name: 'Botnet', pct: 0.23, barPct: 55, color: '#f0c040' },
+      { name: 'Virus', pct: 0.25, barPct: 50, color: '#42c67e' },
+      { name: 'Phishing', pct: 0.20, barPct: 42, color: '#e95e6c' },
+      { name: 'Ransomware', pct: 0.12, barPct: 30, color: '#8a5cf5' },
+      { name: 'Cryptominer', pct: 0.08, barPct: 20, color: '#009cda' },
+    ];
+
+    const threatTargets = [
+      { name: 'United States', pct: 0.82, barPct: 98, color: '#009cda' },
+      { name: 'India', pct: 0.57, barPct: 75, color: '#f4732a' },
+      { name: 'China', pct: 0.18, barPct: 42, color: '#e95e6c' },
+      { name: 'Taiwan', pct: 0.08, barPct: 25, color: '#f0c040' },
+      { name: 'Germany', pct: 0.06, barPct: 20, color: '#42c67e' },
+      { name: 'Japan', pct: 0.05, barPct: 18, color: '#8a5cf5' },
+      { name: 'United Kingdom', pct: 0.04, barPct: 15, color: '#009cda' },
+    ];
+
+    // City coordinates for globe [lat, lon]
+    const cities = [
+      { name: 'New York', lat: 40.71, lon: -74.01 },
+      { name: 'Washington', lat: 38.90, lon: -77.03 },
+      { name: 'Los Angeles', lat: 34.05, lon: -118.24 },
+      { name: 'San Francisco', lat: 37.77, lon: -122.41 },
+      { name: 'Chicago', lat: 41.87, lon: -87.62 },
+      { name: 'Dallas', lat: 32.77, lon: -96.79 },
+      { name: 'London', lat: 51.51, lon: -0.13 },
+      { name: 'Paris', lat: 48.86, lon: 2.35 },
+      { name: 'Frankfurt', lat: 50.11, lon: 8.68 },
+      { name: 'Amsterdam', lat: 52.37, lon: 4.90 },
+      { name: 'Berlin', lat: 52.52, lon: 13.40 },
+      { name: 'Moscow', lat: 55.76, lon: 37.62 },
+      { name: 'Dubai', lat: 25.20, lon: 55.27 },
+      { name: 'Mumbai', lat: 19.08, lon: 72.88 },
+      { name: 'Delhi', lat: 28.61, lon: 77.20 },
+      { name: 'Singapore', lat: 1.35, lon: 103.82 },
+      { name: 'Tokyo', lat: 35.68, lon: 139.69 },
+      { name: 'Osaka', lat: 34.69, lon: 135.50 },
+      { name: 'Seoul', lat: 37.57, lon: 126.98 },
+      { name: 'Beijing', lat: 39.90, lon: 116.40 },
+      { name: 'Shanghai', lat: 31.23, lon: 121.47 },
+      { name: 'Hong Kong', lat: 22.32, lon: 114.17 },
+      { name: 'Taipei', lat: 25.03, lon: 121.57 },
+      { name: 'Sydney', lat: -33.87, lon: 151.21 },
+      { name: 'São Paulo', lat: -23.55, lon: -46.63 },
+      { name: 'Johannesburg', lat: -26.20, lon: 28.05 },
+      { name: 'Cairo', lat: 30.04, lon: 31.24 },
+    ];
+
+    // ========================================================
+    // POPULATE PANELS
+    // ========================================================
+    function populateThreatNames() {
+      const list = document.getElementById('threat-names-list');
+      list.innerHTML = threatNames.map(t => `
+        <div class="threat-name-item">
+          <div class="threat-dot" style="color:${t.color};background:${t.color}"></div>
+          <div class="threat-name-info">
+            <div class="threat-name-text">${t.name}</div>
+            <div class="threat-name-type">${t.type}</div>
+          </div>
+          <div class="threat-info-icon">i</div>
+        </div>
+      `).join('');
+    }
+
+    function populateCountries(containerId, data, labelSuffix) {
+      const list = document.getElementById(containerId);
+      list.innerHTML = data.map((c, i) => `
+        <div class="country-item">
+          <div class="country-rank" style="background:${c.color}22;color:${c.color};border:1px solid ${c.color}44">${i + 1}</div>
+          <div class="country-info">
+            <div class="country-name">${c.name}</div>
+            <div class="country-pct">${c.pct.toFixed(2)}% of All ${labelSuffix}</div>
+          </div>
+          <div class="country-bar-wrap">
+            <div class="country-bar" style="width:0%;background:${c.color}" data-width="${c.barPct}"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function populateCategories() {
+      const list = document.getElementById('threat-categories-list');
+      list.innerHTML = threatCategories.map(c => `
+        <div class="category-item">
+          <div class="category-dot" style="color:${c.color};background:${c.color}"></div>
+          <div class="category-info">
+            <div class="category-name" style="color:${c.color}">${c.name}</div>
+            <div class="category-pct">${c.pct.toFixed(2)}% of All Threats</div>
+          </div>
+          <div class="category-bar-wrap">
+            <div class="category-bar" style="width:0%;background:${c.color}" data-width="${c.barPct}"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Animate bars on load
+    function animateBars() {
+      setTimeout(() => {
+        document.querySelectorAll('[data-width]').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }, 400);
+    }
+
+    // Animate stat counters
+    function animateCounters() {
+      animateValue('stat-threats', 0, 2847, 2000);
+      animateValue('stat-blocked', 0, 18420000, 2500, true);
+      animateValue('stat-countries', 0, 196, 1500);
+    }
+
+    function animateValue(id, start, end, duration, isLarge = false) {
+      const el = document.getElementById(id);
+      const startTime = performance.now();
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + (end - start) * eased);
+        el.textContent = isLarge ? (current / 1000000).toFixed(1) + 'M' : current.toLocaleString();
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    // Live threat count ticker
+    setInterval(() => {
+      const el = document.getElementById('stat-threats');
+      const current = parseInt(el.textContent.replace(/,/g, ''));
+      el.textContent = (current + Math.floor(Math.random() * 20 - 5)).toLocaleString();
+    }, 2000);
+
+    // ========================================================
+    // 3D GLOBE RENDERING (Canvas 2D)
+    // ========================================================
+    const canvas = document.getElementById('globe-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, globeRadius, centerX, centerY;
+    let rotation = -45 * Math.PI / 180; // Start with a nice angle showing EU/Asia
+    let rotationSpeed = 0.001;
+    let tiltAngle = 0.25; // Slight tilt
+    let zoomLevel = 1;
+    let isDragging = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let dragVelocityX = 0;
+    let dragVelocityY = 0;
+
+    // Threat arcs
+    let arcs = [];
+
+    function resize() {
+      const container = document.getElementById('globe-container');
+      // Retina support for crisp lines
+      const dpr = window.devicePixelRatio || 1;
+      const rect = container.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.scale(dpr, dpr);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      
+      centerX = W / 2;
+      centerY = H / 2;
+      globeRadius = Math.min(W, H) * 0.40 * zoomLevel;
+    }
+
+    function latLonTo3D(lat, lon, radius) {
+      const phi = (90 - lat) * (Math.PI / 180);
+      const theta = (lon * Math.PI / 180) + rotation;
+      const x = radius * Math.sin(phi) * Math.cos(theta);
+      let y = radius * Math.cos(phi);
+      let z = radius * Math.sin(phi) * Math.sin(theta);
+      
+      // Apply tilt directly in 3D calc
+      const cosT = Math.cos(tiltAngle);
+      const sinT = Math.sin(tiltAngle);
+      const y2 = y * cosT - z * sinT;
+      const z2 = y * sinT + z * cosT;
+
+      return { x, y: y2, z: z2 };
+    }
+
+    function project(x, y, z) {
+      // Add perspective
+      const focalLength = 1200;
+      const scale = focalLength / (focalLength + z);
+      return {
+        x: centerX + x * scale,
+        y: centerY - y * scale,
+        z: z,
+        scale: scale
+      };
+    }
+
+    // Generate extremely dense dot map approximation
+    function generateWorldPoints() {
+      const pts = [];
+      const landMasses = [
+        ...generateContinent(45, -100, 50, 35, 0.75), // NA
+        ...generateContinent(20, -90, 15, 15, 0.5),  // CA
+        ...generateContinent(-15, -60, 35, 45, 0.7),   // SA
+        ...generateContinent(50, 10, 30, 25, 0.7),    // EU
+        ...generateContinent(60, 60, 70, 30, 0.65),   // Russia
+        ...generateContinent(10, 20, 50, 60, 0.7),    // Africa
+        ...generateContinent(25, 45, 20, 15, 0.6),   // ME
+        ...generateContinent(22, 78, 15, 20, 0.65),    // India
+        ...generateContinent(35, 105, 30, 30, 0.7),  // China
+        ...generateContinent(15, 110, 20, 20, 0.5),   // SEA
+        ...generateContinent(38, 140, 5, 15, 0.5),   // Japan
+        ...generateContinent(-25, 135, 30, 25, 0.65),  // Australia
+        ...generateContinent(-42, 173, 5, 10, 0.4),    // NZ
+      ];
+      return landMasses;
+    }
+
+    function generateContinent(centerLat, centerLon, width, height, density) {
+      const pts = [];
+      const step = 0.8; // Very high density grid
+      for (let lat = centerLat - height/2; lat < centerLat + height/2; lat += step) {
+        for (let lon = centerLon - width/2; lon < centerLon + width/2; lon += step) {
+          const dx = (lat - centerLat) / (height/2);
+          const dy = (lon - centerLon) / (width/2);
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          // Complex noise for detailed jagged borders
+          const noise = Math.sin(lat * 1.5) * Math.cos(lon * 1.2) * 0.15
+                      + Math.sin(lat * -2.5 + lon * 2.8) * 0.1
+                      + Math.cos(lat * 4) * 0.05;
+          if (dist + noise < density) {
+            pts.push({ lat, lon });
+          }
+        }
+      }
+      return pts;
+    }
+
+    const worldPoints = generateWorldPoints();
+
+    function drawGlobe() {
+      ctx.clearRect(0, 0, W, H);
+
+      // 1. Globe sphere (Deep rich ocean blue matching reference)
+      const sphereGrad = ctx.createRadialGradient(
+        centerX - globeRadius * 0.4, centerY - globeRadius * 0.4, globeRadius * 0.1,
+        centerX, centerY, globeRadius
+      );
+      sphereGrad.addColorStop(0, '#1c5ccc');
+      sphereGrad.addColorStop(0.3, '#0b3d99');
+      sphereGrad.addColorStop(0.7, '#042266');
+      sphereGrad.addColorStop(0.95, '#011233');
+      sphereGrad.addColorStop(1, '#000714');
+      
+      ctx.fillStyle = sphereGrad;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, globeRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sharp subtle rim highlight
+      ctx.strokeStyle = 'rgba(100, 150, 255, 0.15)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, globeRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 2. Faint Latitude/Longitude Wireframe Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+      ctx.lineWidth = 0.6;
+      for (let lat = -75; lat <= 75; lat += 15) {
+        ctx.beginPath();
+        let started = false;
+        for (let lon = 0; lon <= 360; lon += 5) {
+          const p3d = latLonTo3D(lat, lon, globeRadius);
+          if (p3d.z > -globeRadius * 0.1) {
+            const p = project(p3d.x, p3d.y, p3d.z);
+            if (!started) { ctx.moveTo(p.x, p.y); started = true; }
+            else ctx.lineTo(p.x, p.y);
+          } else { started = false; }
+        }
+        ctx.stroke();
+      }
+
+      for (let lon = 0; lon < 360; lon += 15) {
+        ctx.beginPath();
+        let started = false;
+        for (let lat = -90; lat <= 90; lat += 5) {
+          const p3d = latLonTo3D(lat, lon, globeRadius);
+          if (p3d.z > -globeRadius * 0.1) {
+            const p = project(p3d.x, p3d.y, p3d.z);
+            if (!started) { ctx.moveTo(p.x, p.y); started = true; }
+            else ctx.lineTo(p.x, p.y);
+          } else { started = false; }
+        }
+        ctx.stroke();
+      }
+
+      // 3. Dense Landmass Matrix
+      ctx.fillStyle = 'rgba(180, 220, 255, 0.85)';
+      worldPoints.forEach(pt => {
+        const p3d = latLonTo3D(pt.lat, pt.lon, globeRadius);
+        if (p3d.z > 0) { // Only draw front face
+          const p = project(p3d.x, p3d.y, p3d.z);
+          // Fade around edges
+          const alphaFade = Math.min(1, p3d.z / (globeRadius * 0.3));
+          ctx.globalAlpha = alphaFade;
+          // Sub-pixel rendering creates crisp dot look
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, Math.max(0.5, 0.8 * p.scale), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+      ctx.globalAlpha = 1.0;
+
+      // 4. Massive amounts of glowing connections (Arcs)
+      drawArcs();
+      
+      // 5. City Hubs (Yellow/Gold Nodes)
+      drawNodes();
+    }
+
+    function generateArcs() {
+      arcs = [];
+      const numArcs = 400; // High density to replicate the reference image
+      
+      for (let i = 0; i < numArcs; i++) {
+        // Favor North America, Europe, Asia specifically
+        const fromIdx = Math.floor(Math.pow(Math.random(), 1.5) * cities.length);
+        let toIdx = Math.floor(Math.pow(Math.random(), 1.5) * cities.length);
+        while (toIdx === fromIdx) toIdx = Math.floor(Math.random() * cities.length);
+
+        const colorPool = [
+          '255, 255, 255', // White/Hot
+          '255, 215, 0',   // Pure Gold
+          '255, 160, 0',   // Orange
+          '255, 230, 120', // Light Yellow
+        ];
+
+        arcs.push({
+          from: cities[fromIdx],
+          to: cities[toIdx],
+          color: colorPool[Math.floor(Math.random() * colorPool.length)],
+          progress: Math.random(), // random start position
+          speed: 0.001 + Math.random() * 0.003, // travel speed
+          height: 0.15 + Math.random() * 0.6, // height off the globe
+          width: 0.3 + Math.random() * 1.0 // extremely thin lines
+        });
+      }
+    }
+
+    function drawArcs() {
+      arcs.forEach(arc => {
+        const from3D = latLonTo3D(arc.from.lat, arc.from.lon, globeRadius);
+        const to3D = latLonTo3D(arc.to.lat, arc.to.lon, globeRadius);
+        
+        // Calculate shortest path midpoint manually
+        let lonDiff = arc.to.lon - arc.from.lon;
+        let midLon = arc.from.lon + lonDiff / 2;
+        if (Math.abs(lonDiff) > 180) {
+          midLon = arc.from.lon + (lonDiff > 0 ? (lonDiff - 360)/2 : (lonDiff + 360)/2);
+        }
+        const midLat = (arc.from.lat + arc.to.lat) / 2;
+        
+        // Arc peak is higher than the globe
+        const mid3D = latLonTo3D(midLat, midLon, globeRadius * (1 + arc.height));
+
+        const fromP = project(from3D.x, from3D.y, from3D.z);
+        const toP = project(to3D.x, to3D.y, to3D.z);
+        const midP = project(mid3D.x, mid3D.y, mid3D.z);
+
+        // Only draw if the arc or its peak is generally visible
+        if (from3D.z > -globeRadius * 0.4 || to3D.z > -globeRadius * 0.4 || mid3D.z > 0) {
+          
+          // Check depth occlusion - fade out curves that go far to the back
+          const avgZ = (from3D.z + mid3D.z + to3D.z) / 3;
+          const alphaFade = Math.max(0, Math.min(1, (avgZ + globeRadius * 1.5) / (globeRadius * 2)));
+          
+          if (alphaFade > 0.02) {
+            // Smooth Quadratic Curve for the trajectory
+            ctx.strokeStyle = `rgba(${arc.color}, ${alphaFade * 0.45})`;
+            ctx.lineWidth = arc.width * midP.scale;
+            ctx.beginPath();
+            ctx.moveTo(fromP.x, fromP.y);
+            ctx.quadraticCurveTo(midP.x, midP.y, toP.x, toP.y);
+            ctx.stroke();
+
+            // Trace glowing particles along the curve
+            const t = arc.progress;
+            const px = Math.pow(1-t, 2) * fromP.x + 2*(1-t)*t * midP.x + Math.pow(t, 2) * toP.x;
+            const py = Math.pow(1-t, 2) * fromP.y + 2*(1-t)*t * midP.y + Math.pow(t, 2) * toP.y;
+            const pz = Math.pow(1-t, 2) * from3D.z + 2*(1-t)*t * mid3D.z + Math.pow(t, 2) * to3D.z;
+
+            // Only draw particle if facing camera
+            if (pz > 0) {
+              const particleIntensity = Math.sin(t * Math.PI); // brightest in middle
+              ctx.fillStyle = `rgba(255, 255, 255, ${particleIntensity})`;
+              ctx.beginPath();
+              ctx.arc(px, py, arc.width * midP.scale * 1.5, 0, Math.PI*2);
+              ctx.fill();
+            }
+          }
+        }
+
+        // Animate progression
+        arc.progress += arc.speed;
+        if (arc.progress > 1) {
+          arc.progress = 0;
+          // Randomize destinations occasionally to keep network dynamic
+          if (Math.random() > 0.5) {
+            arc.from = cities[Math.floor(Math.random() * cities.length)];
+            arc.to = cities[Math.floor(Math.random() * cities.length)];
+          }
+        }
+      });
+    }
+
+    function drawNodes() {
+      cities.forEach(city => {
+        const p3d = latLonTo3D(city.lat, city.lon, globeRadius);
+        if (p3d.z > 0) {
+          const p = project(p3d.x, p3d.y, p3d.z);
+          const alphaFade = Math.min(1, p3d.z / (globeRadius * 0.5));
+          ctx.globalAlpha = alphaFade;
+
+          // Inner solid core
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.2 * p.scale, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Golden/yellow aura
+          ctx.fillStyle = 'rgba(255, 220, 0, 0.6)';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3.5 * p.scale, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.globalAlpha = 1.0;
+        }
+      });
+    }
+
+    // ========================================================
+    // INTERACTION
+    // ========================================================
+    canvas.addEventListener('mousedown', e => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      dragVelocityX = 0;
+      dragVelocityY = 0;
+    });
+
+    canvas.addEventListener('mousemove', e => {
+      if (isDragging) {
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        
+        rotation += dx * 0.005;
+        tiltAngle += dy * 0.005;
+        // Limit tilt
+        tiltAngle = Math.max(-0.5, Math.min(0.8, tiltAngle));
+
+        dragVelocityX = dx * 0.005;
+        dragVelocityY = dy * 0.005;
+        
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+      }
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    
+    // Zoom controls
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      zoomLevel = Math.min(2.5, zoomLevel + 0.15);
+      resize();
+    });
+
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      zoomLevel = Math.max(0.5, zoomLevel - 0.15);
+      resize();
+    });
+
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      zoomLevel += (e.deltaY < 0 ? 0.08 : -0.08);
+      zoomLevel = Math.max(0.5, Math.min(2.5, zoomLevel));
+      resize();
+    }, { passive: false });
+
+    // ========================================================
+    // ANIMATION LOOP
+    // ========================================================
+    function animate() {
+      if (!isDragging) {
+        if (Math.abs(dragVelocityX) > 0.0001) {
+          rotation += dragVelocityX;
+          dragVelocityX *= 0.95;
+        } else {
+          rotation -= rotationSpeed; // Constantly spin slowly
+        }
+        
+        if (Math.abs(dragVelocityY) > 0.0001) {
+          tiltAngle += dragVelocityY;
+          tiltAngle = Math.max(-0.5, Math.min(0.8, tiltAngle));
+          dragVelocityY *= 0.95;
+        }
+      }
+
+      // Smooth resizing calculation
+      globeRadius = Math.min(W, H) * 0.40 * zoomLevel;
+      drawGlobe();
+      requestAnimationFrame(animate);
+    }
+
+    // ========================================================
+    // INITIALIZATION
+    // ========================================================
+    function init() {
+      resize();
+      populateThreatNames();
+      populateCountries('threat-origins-list', threatOrigins, 'Sources');
+      populateCategories();
+      populateCountries('threat-targets-list', threatTargets, 'Destinations');
+      generateArcs();
+      animateBars();
+      animateCounters();
+      animate();
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
